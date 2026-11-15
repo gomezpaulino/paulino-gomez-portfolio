@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   ArrowRight,
   ArrowUpRight,
@@ -5,6 +6,7 @@ import {
   Check,
   Github,
   Languages,
+  Menu,
   MessageCircle,
   Nfc,
   Palette,
@@ -12,12 +14,24 @@ import {
   QrCode,
   Smartphone,
   UtensilsCrossed,
+  X,
 } from 'lucide-react';
 
 // WhatsApp contact with a prefilled message, so the visitor only has to send it.
-const WHATSAPP_URL =
-  'https://wa.me/18093053316?text=Hola%20Paulino%2C%20quiero%20una%20p%C3%A1gina%20web%20para%20mi%20negocio';
+// Two numbers: the Dominican line is the main one, the US line is for US clients.
+const WHATSAPP_TEXT =
+  'Hola%20Paulino%2C%20quiero%20una%20p%C3%A1gina%20web%20para%20mi%20negocio';
+const WHATSAPP_URL_RD = `https://wa.me/18093053316?text=${WHATSAPP_TEXT}`;
+const WHATSAPP_URL_US = `https://wa.me/19295915936?text=${WHATSAPP_TEXT}`;
 const GITHUB_URL = 'https://github.com/gomezpaulino';
+
+const NAV_LINKS = [
+  { label: 'Trabajos', href: '#trabajos' },
+  { label: 'El producto', href: '#producto' },
+  { label: 'Servicios', href: '#servicios' },
+  { label: 'Kit físico', href: '#kit' },
+  { label: 'Cómo funciona', href: '#proceso' },
+];
 
 type Project = {
   name: string;
@@ -262,30 +276,67 @@ function ProjectCard({ project }: { project: Project }) {
 }
 
 export default function App() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-crema-50 font-body text-amber-900 antialiased">
       <header className="sticky top-0 z-40 border-b border-crema-200 bg-crema-50/90 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
-          <a href="#inicio" className="font-display text-xl font-semibold text-amber-900">
+          <a href="#inicio" className="whitespace-nowrap font-display text-lg font-semibold text-amber-900 sm:text-xl">
             Paulino Gómez
           </a>
           <nav aria-label="Secciones" className="hidden items-center gap-7 text-sm font-semibold text-amber-800/80 md:flex">
-            <a href="#trabajos" className="hover:text-verde-700">Trabajos</a>
-            <a href="#producto" className="hover:text-verde-700">El producto</a>
-            <a href="#servicios" className="hover:text-verde-700">Servicios</a>
-            <a href="#kit" className="hover:text-verde-700">Kit físico</a>
-            <a href="#proceso" className="hover:text-verde-700">Cómo funciona</a>
+            {NAV_LINKS.map((link) => (
+              <a key={link.href} href={link.href} className="hover:text-verde-700">
+                {link.label}
+              </a>
+            ))}
           </nav>
-          <a
-            href={WHATSAPP_URL}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-2 rounded-full bg-verde-700 px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-verde-800"
-          >
-            <MessageCircle className="h-4 w-4" aria-hidden="true" />
-            WhatsApp
-          </a>
+          <div className="flex shrink-0 items-center gap-2">
+            <a
+              href={WHATSAPP_URL_RD}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 rounded-full bg-verde-700 px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-verde-800"
+            >
+              <MessageCircle className="h-4 w-4" aria-hidden="true" />
+              WhatsApp
+            </a>
+            <button
+              type="button"
+              onClick={() => setMenuOpen((open) => !open)}
+              aria-expanded={menuOpen}
+              aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full text-amber-900 transition-colors hover:bg-crema-200 md:hidden"
+            >
+              {menuOpen ? (
+                <X className="h-6 w-6" aria-hidden="true" />
+              ) : (
+                <Menu className="h-6 w-6" aria-hidden="true" />
+              )}
+            </button>
+          </div>
         </div>
+        {menuOpen ? (
+          <nav
+            aria-label="Secciones"
+            className="border-t border-crema-200 bg-crema-50 px-5 py-3 md:hidden"
+          >
+            <ul className="flex flex-col">
+              {NAV_LINKS.map((link) => (
+                <li key={link.href}>
+                  <a
+                    href={link.href}
+                    onClick={() => setMenuOpen(false)}
+                    className="block rounded-lg px-3 py-3 text-base font-semibold text-amber-900 hover:bg-crema-200"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ) : null}
       </header>
 
       <main id="inicio">
@@ -310,7 +361,7 @@ export default function App() {
             </p>
             <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <a
-                href={WHATSAPP_URL}
+                href={WHATSAPP_URL_RD}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-verde-700 px-7 py-3.5 text-base font-bold text-white transition-colors hover:bg-verde-800 sm:w-auto"
@@ -527,18 +578,39 @@ export default function App() {
               ¿Hablamos de tu página?
             </h2>
             <p className="mt-4 text-lg leading-relaxed text-crema-200">
-              Escríbeme por WhatsApp y te cotizo según tu negocio y tu
-              mercado. Te respondo personalmente.
+              Escríbeme por WhatsApp al número de tu país y te cotizo según
+              tu negocio y tu mercado. Te respondo personalmente.
             </p>
-            <a
-              href={WHATSAPP_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 text-base font-bold text-verde-800 transition-colors hover:bg-crema-100"
-            >
-              <MessageCircle className="h-5 w-5" aria-hidden="true" />
-              Escríbeme por WhatsApp
-            </a>
+            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <a
+                href={WHATSAPP_URL_RD}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex w-full flex-col items-center gap-0.5 rounded-2xl bg-white px-8 py-4 font-bold text-verde-800 transition-colors hover:bg-crema-100 sm:w-auto"
+              >
+                <span className="inline-flex items-center gap-2 text-base">
+                  <MessageCircle className="h-5 w-5" aria-hidden="true" />
+                  WhatsApp · República Dominicana
+                </span>
+                <span className="text-sm font-semibold text-verde-800/70">
+                  +1 (809) 305-3316
+                </span>
+              </a>
+              <a
+                href={WHATSAPP_URL_US}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex w-full flex-col items-center gap-0.5 rounded-2xl bg-white px-8 py-4 font-bold text-verde-800 transition-colors hover:bg-crema-100 sm:w-auto"
+              >
+                <span className="inline-flex items-center gap-2 text-base">
+                  <MessageCircle className="h-5 w-5" aria-hidden="true" />
+                  WhatsApp · Estados Unidos
+                </span>
+                <span className="text-sm font-semibold text-verde-800/70">
+                  +1 (929) 591-5936
+                </span>
+              </a>
+            </div>
             <p className="mt-5 text-sm font-medium text-crema-200/70">
               Sin compromiso.
             </p>
