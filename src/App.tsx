@@ -138,7 +138,7 @@ const CONTENT: Record<Lang, Content> = {
       language: 'Idioma',
     },
     whatsappText:
-      'Hola%20Paulino%2C%20quiero%20una%20p%C3%A1gina%20web%20para%20mi%20negocio',
+      'Hola%20Paulino%2C%20tengo%20un%20restaurante%20y%20quiero%20saber%20m%C3%A1s%20del%20men%C3%BA%20QR.',
     hero: {
       eyebrow: 'Menús QR para restaurantes · RD y Nueva York',
       titleA: 'Tus clientes escanean el QR.',
@@ -219,7 +219,7 @@ const CONTENT: Record<Lang, Content> = {
     services: {
       eyebrow: 'Servicios',
       title: 'Qué puedo hacer por tu negocio',
-      sub: 'Cada proyecto se cotiza según tu negocio y tu mercado.',
+      sub: 'Cada proyecto se cotiza por separado.',
       items: [
         {
           icon: QrCode,
@@ -268,7 +268,7 @@ const CONTENT: Record<Lang, Content> = {
     },
     process: {
       eyebrow: 'Cómo funciona',
-      title: 'De tu menú a tu página en días',
+      title: 'De tu menú a tu página en 1–3 días',
       sub: 'Un proceso corto y claro. Sabes qué recibes y cuándo, antes de empezar.',
       steps: [
         {
@@ -300,12 +300,12 @@ const CONTENT: Record<Lang, Content> = {
         {
           question: '¿Cuánto tarda en estar lista mi página?',
           answer:
-            'En días. Me pasas tu menú, tus fotos y tus precios, y yo armo todo.',
+            'En 1–3 días. Me pasas tu menú, tus fotos y tus precios, y yo armo todo.',
         },
         {
           question: '¿Cuánto cuesta?',
           answer:
-            'Cada proyecto se cotiza según tu negocio y tu mercado. Escríbeme por WhatsApp y te cotizo sin compromiso.',
+            'Cada proyecto se cotiza por separado. Escríbeme por WhatsApp y te cotizo sin compromiso.',
         },
         {
           question: '¿Necesito tener un dominio o una página web ya?',
@@ -321,7 +321,7 @@ const CONTENT: Record<Lang, Content> = {
     },
     contact: {
       title: '¿Hablamos de tu página?',
-      sub: 'Escríbeme por WhatsApp al número de tu país y te cotizo según tu negocio y tu mercado. Te respondo yo mismo.',
+      sub: 'Escríbeme por WhatsApp al número de tu país y te mando tu cotización. Te respondo yo mismo, normalmente en unas horas.',
       rdLabel: 'WhatsApp · República Dominicana',
       usLabel: 'WhatsApp · Estados Unidos',
       preferCall: '¿Prefieres llamar?',
@@ -359,7 +359,7 @@ const CONTENT: Record<Lang, Content> = {
       language: 'Language',
     },
     whatsappText:
-      'Hi%20Paulino%2C%20I%20want%20a%20website%20for%20my%20business',
+      'Hi%20Paulino%2C%20I%20own%20a%20restaurant%20and%20I%27d%20like%20to%20know%20more%20about%20the%20QR%20menu.',
     hero: {
       eyebrow: 'QR menus for restaurants · DR and New York',
       titleA: 'Diners scan the QR.',
@@ -440,7 +440,7 @@ const CONTENT: Record<Lang, Content> = {
     services: {
       eyebrow: 'Services',
       title: 'What I can do for your business',
-      sub: 'Every project is quoted for your business and your market.',
+      sub: 'Every project is quoted individually.',
       items: [
         {
           icon: QrCode,
@@ -489,7 +489,7 @@ const CONTENT: Record<Lang, Content> = {
     },
     process: {
       eyebrow: 'How it works',
-      title: 'From your menu to your page in days',
+      title: 'From your menu to your page in 1–3 days',
       sub: 'A short, clear process. You know what you get and when, before we start.',
       steps: [
         {
@@ -521,12 +521,12 @@ const CONTENT: Record<Lang, Content> = {
         {
           question: 'How long until my page is ready?',
           answer:
-            'Days. Send me your menu, your photos and your prices, and I build it all.',
+            '1–3 days. Send me your menu, your photos and your prices, and I build it all.',
         },
         {
           question: 'How much does it cost?',
           answer:
-            "Every project is quoted for your business and your market. Message me on WhatsApp and I'll quote you, no strings attached.",
+            "Every project is quoted individually. Message me on WhatsApp and I'll quote you, no strings attached.",
         },
         {
           question: 'Do I need a domain or a website already?',
@@ -542,7 +542,7 @@ const CONTENT: Record<Lang, Content> = {
     },
     contact: {
       title: 'Want to talk about your page?',
-      sub: "Message me on WhatsApp at the number for your country and I'll quote you for your business and your market. I answer every message myself.",
+      sub: "Message me on WhatsApp at the number for your country and I'll send you a quote. I answer every message myself, usually within a few hours.",
       rdLabel: 'WhatsApp · Dominican Republic',
       usLabel: 'WhatsApp · United States',
       preferCall: 'Prefer to call?',
