@@ -1,0 +1,10 @@
+/* TEAM */
+
+  Paulino Gómez — Developer
+  GitHub: https://github.com/gomezpaulino
+
+/* SITE */
+
+  Language: Spanish
+  Stack: React + Vite + Tailwind CSS
+  Hosting: Cloudflare Pages
