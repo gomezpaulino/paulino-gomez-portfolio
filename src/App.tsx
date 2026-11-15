@@ -4,6 +4,7 @@ import {
   ArrowUpRight,
   Building2,
   Check,
+  ChevronDown,
   Github,
   Languages,
   Menu,
@@ -31,6 +32,7 @@ const NAV_LINKS = [
   { label: 'Servicios', href: '#servicios' },
   { label: 'Kit físico', href: '#kit' },
   { label: 'Cómo funciona', href: '#proceso' },
+  { label: 'Preguntas', href: '#faq' },
 ];
 
 type Project = {
@@ -141,6 +143,34 @@ const PROCESS_STEPS = [
     num: '03',
     title: 'Tu página en vivo en días',
     text: 'QRs listos para imprimir y poner en las mesas.',
+  },
+];
+
+const FAQS = [
+  {
+    question: '¿Mis clientes tienen que instalar una aplicación?',
+    answer:
+      'No. Escanean el QR con la cámara del teléfono y el menú abre en el navegador. Nada que descargar.',
+  },
+  {
+    question: '¿Cuánto tarda en estar lista mi página?',
+    answer:
+      'En días. Me pasas tu menú, tus fotos y tus precios, y yo armo todo.',
+  },
+  {
+    question: '¿Cuánto cuesta?',
+    answer:
+      'Cada proyecto se cotiza según tu negocio y tu mercado. Escríbeme por WhatsApp y te cotizo sin compromiso.',
+  },
+  {
+    question: '¿Necesito tener un dominio o una página web ya?',
+    answer:
+      'No. Tu página queda en línea desde el primer día. Si más adelante quieres tu propio dominio, se le agrega.',
+  },
+  {
+    question: '¿Qué pasa cuando cambio mi menú o mis precios?',
+    answer:
+      'Me avisas y lo actualizo. Las actualizaciones del menú están incluidas.',
   },
 ];
 
@@ -263,7 +293,7 @@ export default function App() {
           <a href="#main" className="whitespace-nowrap font-display text-lg font-semibold text-amber-900 sm:text-xl">
             Paulino Gómez
           </a>
-          <nav aria-label="Secciones" className="hidden items-center gap-7 text-sm font-semibold text-amber-800/80 md:flex">
+          <nav aria-label="Secciones" className="hidden items-center gap-5 text-sm font-semibold text-amber-800/80 lg:flex lg:gap-7">
             {NAV_LINKS.map((link) => (
               <a key={link.href} href={link.href} className="hover:text-verde-700">
                 {link.label}
@@ -286,7 +316,7 @@ export default function App() {
               onClick={() => setMenuOpen((open) => !open)}
               aria-expanded={menuOpen}
               aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full text-amber-900 transition-colors hover:bg-crema-200 md:hidden"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full text-amber-900 transition-colors hover:bg-crema-200 lg:hidden"
             >
               {menuOpen ? (
                 <X className="h-6 w-6" aria-hidden="true" />
@@ -299,7 +329,7 @@ export default function App() {
         {menuOpen ? (
           <nav
             aria-label="Secciones"
-            className="border-t border-crema-200 bg-crema-50 px-5 py-3 md:hidden"
+            className="border-t border-crema-200 bg-crema-50 px-5 py-3 lg:hidden"
           >
             <ul className="flex flex-col">
               {NAV_LINKS.map((link) => (
@@ -540,6 +570,42 @@ export default function App() {
                 </li>
               ))}
             </ol>
+          </div>
+        </section>
+
+        {/* FAQ: native details/summary, accessible without JavaScript. */}
+        <section
+          id="faq"
+          aria-labelledby="faq-title"
+          className="scroll-mt-20 border-y border-crema-200 bg-white py-16 sm:py-24"
+        >
+          <div className="mx-auto max-w-6xl px-5">
+            <SectionHeading
+              eyebrow="Preguntas frecuentes"
+              title="Lo que me preguntan antes de empezar"
+            />
+            <div className="mx-auto mt-12 max-w-3xl space-y-4">
+              {FAQS.map((faq, index) => (
+                <details
+                  key={faq.question}
+                  open={index === 0}
+                  className="group rounded-2xl border border-crema-200 bg-crema-50"
+                >
+                  <summary className="flex w-full cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 text-left [&::-webkit-details-marker]:hidden">
+                    <span className="font-display text-lg font-semibold text-amber-900">
+                      {faq.question}
+                    </span>
+                    <ChevronDown
+                      className="h-5 w-5 shrink-0 text-verde-700 transition-transform group-open:rotate-180"
+                      aria-hidden="true"
+                    />
+                  </summary>
+                  <p className="px-6 pb-5 text-[15px] leading-relaxed text-amber-800/80">
+                    {faq.answer}
+                  </p>
+                </details>
+              ))}
+            </div>
           </div>
         </section>
 
