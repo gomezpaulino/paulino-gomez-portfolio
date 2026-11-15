@@ -17,23 +17,9 @@ import {
   UtensilsCrossed,
   X,
 } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
-// WhatsApp contact with a prefilled message, so the visitor only has to send it.
-// Two numbers: the Dominican line is the main one, the US line is for US clients.
-const WHATSAPP_TEXT =
-  'Hola%20Paulino%2C%20quiero%20una%20p%C3%A1gina%20web%20para%20mi%20negocio';
-const WHATSAPP_URL_RD = `https://wa.me/18093053316?text=${WHATSAPP_TEXT}`;
-const WHATSAPP_URL_US = `https://wa.me/19295915936?text=${WHATSAPP_TEXT}`;
-const GITHUB_URL = 'https://github.com/gomezpaulino';
-
-const NAV_LINKS = [
-  { label: 'Trabajos', href: '#trabajos' },
-  { label: 'El producto', href: '#producto' },
-  { label: 'Servicios', href: '#servicios' },
-  { label: 'Kit físico', href: '#kit' },
-  { label: 'Cómo funciona', href: '#proceso' },
-  { label: 'Preguntas', href: '#faq' },
-];
+type Lang = 'es' | 'en';
 
 type Project = {
   name: string;
@@ -46,140 +32,555 @@ type Project = {
   previewImage: string;
 };
 
-const PROJECTS: Project[] = [
-  {
-    name: 'Los Chamos x La Calle',
-    tagline: 'Comida venezolana',
-    location: 'Veragua, República Dominicana',
-    description:
-      'Menú en línea con pedidos por WhatsApp y fotos reales de cada plato.',
-    url: 'https://los-chamos-x-la-calle.pages.dev',
-    domain: 'los-chamos-x-la-calle.pages.dev',
-    previewImage: '/img/work-los-chamos.jpg',
-  },
-  {
-    name: 'Grotto Bar Restaurant',
-    tagline: 'Bar restaurante',
-    location: 'Sosúa, República Dominicana',
-    description:
-      'Menú QR en español, inglés y francés. El cliente pide desde su mesa y el pedido llega por WhatsApp.',
-    url: 'https://grotto-ao8.pages.dev',
-    domain: 'grotto-ao8.pages.dev',
-    previewImage: '/img/work-grotto.jpg',
-  },
-  {
-    name: 'An Dún Medical Practice',
-    tagline: 'Clínica médica',
-    location: 'Donegal Town, Irlanda',
-    description:
-      'Página profesional con servicios, equipo y reservas en línea.',
-    url: 'https://www.andunmedical.ie',
-    domain: 'www.andunmedical.ie',
-    previewImage: '/img/work-andun.jpg',
-  },
-];
+type IconItem = {
+  icon: LucideIcon;
+  title: string;
+  text: string;
+};
 
-const SERVICES = [
-  {
-    icon: QrCode,
-    title: 'Menú digital con pedidos',
-    text: 'El cliente pide desde la mesa y el pedido te llega por WhatsApp.',
-  },
-  {
-    icon: UtensilsCrossed,
-    title: 'Páginas para restaurantes',
-    text: 'Menú, fotos, ubicación y pedidos, todo en un solo lugar.',
-  },
-  {
-    icon: Building2,
-    title: 'Páginas para negocios y clínicas',
-    text: 'Servicios, equipo, contacto y reservas en línea.',
-  },
-  {
-    icon: Languages,
-    title: 'Sitios en varios idiomas',
-    text: 'Español, inglés y francés, para que ningún cliente se pierda.',
-  },
-];
+/** Every user-facing string on the page, in both languages. */
+type Content = {
+  meta: { title: string; description: string };
+  skipLink: string;
+  /** Screen-reader note on links that open a new tab. */
+  newTab: string;
+  nav: { label: string; href: string }[];
+  /** Accessible name for the section navigation. */
+  navLabel: string;
+  menu: { open: string; close: string };
+  switcher: { toEnglish: string; toSpanish: string; language: string };
+  /** URL-encoded prefilled WhatsApp message, in the visitor's language. */
+  whatsappText: string;
+  hero: {
+    eyebrow: string;
+    titleA: string;
+    titleEm: string;
+    sub: string;
+    ctaPrimary: string;
+    ctaSecondary: string;
+    trust: string;
+  };
+  work: {
+    eyebrow: string;
+    title: string;
+    sub: string;
+    visit: string;
+    projects: Project[];
+  };
+  product: {
+    eyebrow: string;
+    title: string;
+    sub: string;
+    steps: IconItem[];
+    includesTitle: string;
+    includes: string[];
+  };
+  services: {
+    eyebrow: string;
+    title: string;
+    sub: string;
+    items: IconItem[];
+  };
+  kit: {
+    eyebrow: string;
+    title: string;
+    sub: string;
+    items: IconItem[];
+    note: string;
+  };
+  process: {
+    eyebrow: string;
+    title: string;
+    sub: string;
+    steps: { num: string; title: string; text: string }[];
+  };
+  faq: {
+    eyebrow: string;
+    title: string;
+    items: { question: string; answer: string }[];
+  };
+  contact: {
+    title: string;
+    sub: string;
+    rdLabel: string;
+    usLabel: string;
+    preferCall: string;
+    rdCall: string;
+    usCall: string;
+    noStrings: string;
+  };
+  footer: { tagline: string; copyright: string };
+  floatingCta: string;
+};
 
-const PRODUCT_INCLUDES = [
-  'La página web con tu menú',
-  'Códigos QR por mesa',
-  'Menú en varios idiomas',
-  'Actualizaciones del menú cuando cambies algo',
-  'Reporte semanal de escaneos y pedidos',
-];
+const CONTENT: Record<Lang, Content> = {
+  es: {
+    meta: {
+      title: 'Paulino Gómez — Páginas web para restaurantes y negocios',
+      description:
+        'Menús digitales con pedidos por WhatsApp, páginas para restaurantes, negocios y clínicas. Tus clientes piden desde la mesa y los pedidos te llegan a ti.',
+    },
+    skipLink: 'Saltar al contenido',
+    newTab: '(se abre en otra pestaña)',
+    nav: [
+      { label: 'Trabajos', href: '#trabajos' },
+      { label: 'El producto', href: '#producto' },
+      { label: 'Servicios', href: '#servicios' },
+      { label: 'Kit físico', href: '#kit' },
+      { label: 'Cómo funciona', href: '#proceso' },
+      { label: 'Preguntas', href: '#faq' },
+    ],
+    navLabel: 'Secciones',
+    menu: { open: 'Abrir menú', close: 'Cerrar menú' },
+    switcher: {
+      toEnglish: 'Cambiar a inglés',
+      toSpanish: 'Cambiar a español',
+      language: 'Idioma',
+    },
+    whatsappText:
+      'Hola%20Paulino%2C%20quiero%20una%20p%C3%A1gina%20web%20para%20mi%20negocio',
+    hero: {
+      eyebrow: 'Sitios web para restaurantes y negocios',
+      titleA: 'Páginas web que',
+      titleEm: 'traen clientes',
+      sub: 'Menús digitales con pedidos por WhatsApp, páginas para restaurantes, negocios y clínicas. Tus clientes piden desde la mesa y los pedidos te llegan a ti, sin apps nuevas ni comisiones por pedido.',
+      ctaPrimary: 'Escríbeme por WhatsApp',
+      ctaSecondary: 'Ver trabajos',
+      trust: '3 sitios en vivo · República Dominicana y Irlanda',
+    },
+    work: {
+      eyebrow: 'Trabajos recientes',
+      title: 'Sitios reales, en vivo hoy',
+      sub: 'Haz click y míralos. Cada uno se hizo a la medida de su negocio.',
+      visit: 'Visitar sitio',
+      projects: [
+        {
+          name: 'Los Chamos x La Calle',
+          tagline: 'Comida venezolana',
+          location: 'Veragua, República Dominicana',
+          description:
+            'Menú en línea con pedidos por WhatsApp y fotos reales de cada plato.',
+          url: 'https://los-chamos-x-la-calle.pages.dev',
+          domain: 'los-chamos-x-la-calle.pages.dev',
+          previewImage: '/img/work-los-chamos.jpg',
+        },
+        {
+          name: 'Grotto Bar Restaurant',
+          tagline: 'Bar restaurante',
+          location: 'Sosúa, República Dominicana',
+          description:
+            'Menú QR en español, inglés y francés. El cliente pide desde su mesa y el pedido llega por WhatsApp.',
+          url: 'https://grotto-ao8.pages.dev',
+          domain: 'grotto-ao8.pages.dev',
+          previewImage: '/img/work-grotto.jpg',
+        },
+        {
+          name: 'An Dún Medical Practice',
+          tagline: 'Clínica médica',
+          location: 'Donegal Town, Irlanda',
+          description:
+            'Página profesional con servicios, equipo y reservas en línea.',
+          url: 'https://www.andunmedical.ie',
+          domain: 'www.andunmedical.ie',
+          previewImage: '/img/work-andun.jpg',
+        },
+      ],
+    },
+    product: {
+      eyebrow: 'Menú digital con pedidos por WhatsApp',
+      title: 'Tus clientes piden desde la mesa',
+      sub: 'Sin descargar nada, sin llamar al mesero para pedir. El pedido cae en tu WhatsApp, listo para preparar.',
+      steps: [
+        {
+          icon: QrCode,
+          title: '1. Escanean el QR',
+          text: 'En la mesa, con la cámara del teléfono. Nada que instalar.',
+        },
+        {
+          icon: Smartphone,
+          title: '2. Eligen y piden',
+          text: 'Menú con fotos y precios, en su idioma.',
+        },
+        {
+          icon: MessageCircle,
+          title: '3. Te llega por WhatsApp',
+          text: 'El pedido llega a tu teléfono, con mesa y todo, listo para preparar.',
+        },
+      ],
+      includesTitle: 'Qué incluye',
+      includes: [
+        'La página web con tu menú',
+        'Códigos QR por mesa',
+        'Menú en varios idiomas',
+        'Actualizaciones del menú cuando cambies algo',
+        'Reporte semanal de escaneos y pedidos',
+      ],
+    },
+    services: {
+      eyebrow: 'Servicios',
+      title: 'Qué puedo hacer por tu negocio',
+      sub: 'Cada proyecto se cotiza según tu negocio y tu mercado.',
+      items: [
+        {
+          icon: QrCode,
+          title: 'Menú digital con pedidos',
+          text: 'El cliente pide desde la mesa y el pedido te llega por WhatsApp.',
+        },
+        {
+          icon: UtensilsCrossed,
+          title: 'Páginas para restaurantes',
+          text: 'Menú, fotos, ubicación y pedidos, todo en un solo lugar.',
+        },
+        {
+          icon: Building2,
+          title: 'Páginas para negocios y clínicas',
+          text: 'Servicios, equipo, contacto y reservas en línea.',
+        },
+        {
+          icon: Languages,
+          title: 'Sitios en varios idiomas',
+          text: 'Español, inglés y francés, para que ningún cliente se pierda.',
+        },
+      ],
+    },
+    kit: {
+      eyebrow: 'Extra · Kit físico',
+      title: 'Más que una página: piezas que tus clientes pueden tocar',
+      sub: 'Stands y servilleteros impresos en 3D con tu QR, para que el menú esté en cada mesa, no solo en el teléfono.',
+      items: [
+        {
+          icon: Printer,
+          title: 'Piezas impresas en 3D',
+          text: 'Servilleteros y stands con tu QR y el número de mesa, en los colores de tu marca.',
+        },
+        {
+          icon: Nfc,
+          title: 'Tags NFC',
+          text: 'El cliente acerca el teléfono y el menú abre solo, sin escanear ni buscar la cámara.',
+        },
+        {
+          icon: Palette,
+          title: 'Hecho para tu marca',
+          text: 'Base reutilizable con la placa del QR intercambiable: si cambia tu menú o tu número, se reimprime solo la plaquita.',
+        },
+      ],
+      note: 'Disponible bajo pedido. Pregúntame por el kit cuando escribas.',
+    },
+    process: {
+      eyebrow: 'Cómo funciona',
+      title: 'De tu menú a tu página en días',
+      sub: 'Un proceso corto y claro. Sabes qué recibes y cuándo, antes de empezar.',
+      steps: [
+        {
+          num: '01',
+          title: 'Me cuentas de tu negocio',
+          text: 'Una llamada corta: tu menú, tus mesas, tus clientes.',
+        },
+        {
+          num: '02',
+          title: 'Diseño y contenido',
+          text: 'Armo tu página con tu menú real y tus fotos.',
+        },
+        {
+          num: '03',
+          title: 'Tu página en vivo en días',
+          text: 'QRs listos para imprimir y poner en las mesas.',
+        },
+      ],
+    },
+    faq: {
+      eyebrow: 'Preguntas frecuentes',
+      title: 'Lo que me preguntan antes de empezar',
+      items: [
+        {
+          question: '¿Mis clientes tienen que instalar una aplicación?',
+          answer:
+            'No. Escanean el QR con la cámara del teléfono y el menú abre en el navegador. Nada que descargar.',
+        },
+        {
+          question: '¿Cuánto tarda en estar lista mi página?',
+          answer:
+            'En días. Me pasas tu menú, tus fotos y tus precios, y yo armo todo.',
+        },
+        {
+          question: '¿Cuánto cuesta?',
+          answer:
+            'Cada proyecto se cotiza según tu negocio y tu mercado. Escríbeme por WhatsApp y te cotizo sin compromiso.',
+        },
+        {
+          question: '¿Necesito tener un dominio o una página web ya?',
+          answer:
+            'No. Tu página queda en línea desde el primer día. Si más adelante quieres tu propio dominio, se le agrega.',
+        },
+        {
+          question: '¿Qué pasa cuando cambio mi menú o mis precios?',
+          answer:
+            'Me avisas y lo actualizo. Las actualizaciones del menú están incluidas.',
+        },
+      ],
+    },
+    contact: {
+      title: '¿Hablamos de tu página?',
+      sub: 'Escríbeme por WhatsApp al número de tu país y te cotizo según tu negocio y tu mercado. Te respondo personalmente.',
+      rdLabel: 'WhatsApp · República Dominicana',
+      usLabel: 'WhatsApp · Estados Unidos',
+      preferCall: '¿Prefieres llamar?',
+      rdCall: 'RD +1 (809) 305-3316',
+      usCall: 'US +1 (929) 591-5936',
+      noStrings: 'Sin compromiso.',
+    },
+    footer: {
+      tagline: 'Sitios web para restaurantes y negocios',
+      copyright: '© 2026 Paulino Gómez · República Dominicana — Nueva York',
+    },
+    floatingCta: 'Escríbeme por WhatsApp',
+  },
+  en: {
+    meta: {
+      title: 'Paulino Gómez — Websites for restaurants and businesses',
+      description:
+        'QR ordering menus with WhatsApp orders, websites for restaurants, businesses and clinics. Your customers order from the table and the orders come to you.',
+    },
+    skipLink: 'Skip to content',
+    newTab: '(opens in a new tab)',
+    nav: [
+      { label: 'Work', href: '#trabajos' },
+      { label: 'The product', href: '#producto' },
+      { label: 'Services', href: '#servicios' },
+      { label: 'Physical kit', href: '#kit' },
+      { label: 'How it works', href: '#proceso' },
+      { label: 'FAQ', href: '#faq' },
+    ],
+    navLabel: 'Sections',
+    menu: { open: 'Open menu', close: 'Close menu' },
+    switcher: {
+      toEnglish: 'Switch to English',
+      toSpanish: 'Switch to Spanish',
+      language: 'Language',
+    },
+    whatsappText:
+      'Hi%20Paulino%2C%20I%20want%20a%20website%20for%20my%20business',
+    hero: {
+      eyebrow: 'Websites for restaurants and businesses',
+      titleA: 'Websites that',
+      titleEm: 'bring in customers',
+      sub: 'QR ordering menus with WhatsApp orders, websites for restaurants, businesses and clinics. Your customers order from the table and the orders come to you — no new apps, no per-order commissions.',
+      ctaPrimary: 'Message me on WhatsApp',
+      ctaSecondary: 'See my work',
+      trust: '3 sites live · Dominican Republic and Ireland',
+    },
+    work: {
+      eyebrow: 'Recent work',
+      title: 'Real sites, live today',
+      sub: 'Click through and see for yourself. Each one was made to fit its business.',
+      visit: 'Visit site',
+      projects: [
+        {
+          name: 'Los Chamos x La Calle',
+          tagline: 'Venezuelan food',
+          location: 'Veragua, Dominican Republic',
+          description:
+            'Online menu with WhatsApp ordering and real photos of every dish.',
+          url: 'https://los-chamos-x-la-calle.pages.dev',
+          domain: 'los-chamos-x-la-calle.pages.dev',
+          previewImage: '/img/work-los-chamos.jpg',
+        },
+        {
+          name: 'Grotto Bar Restaurant',
+          tagline: 'Bar restaurant',
+          location: 'Sosúa, Dominican Republic',
+          description:
+            'QR menu in Spanish, English and French. Customers order from their table and the order arrives on WhatsApp.',
+          url: 'https://grotto-ao8.pages.dev',
+          domain: 'grotto-ao8.pages.dev',
+          previewImage: '/img/work-grotto.jpg',
+        },
+        {
+          name: 'An Dún Medical Practice',
+          tagline: 'Medical clinic',
+          location: 'Donegal Town, Ireland',
+          description:
+            'Professional site with services, team and online bookings.',
+          url: 'https://www.andunmedical.ie',
+          domain: 'www.andunmedical.ie',
+          previewImage: '/img/work-andun.jpg',
+        },
+      ],
+    },
+    product: {
+      eyebrow: 'QR ordering menu',
+      title: 'Your customers order from the table',
+      sub: 'Nothing to download, no need to flag down the waiter to order. The order lands on your WhatsApp, ready to prepare.',
+      steps: [
+        {
+          icon: QrCode,
+          title: '1. They scan the QR',
+          text: 'At the table, with the phone camera. Nothing to install.',
+        },
+        {
+          icon: Smartphone,
+          title: '2. They choose and order',
+          text: 'Menu with photos and prices, in their language.',
+        },
+        {
+          icon: MessageCircle,
+          title: '3. It reaches you on WhatsApp',
+          text: 'The order arrives on your phone, table number and all, ready to prepare.',
+        },
+      ],
+      includesTitle: "What's included",
+      includes: [
+        'The website with your menu',
+        'QR codes per table',
+        'Menu in several languages',
+        'Menu updates whenever you change something',
+        'Weekly scan and order report',
+      ],
+    },
+    services: {
+      eyebrow: 'Services',
+      title: 'What I can do for your business',
+      sub: 'Every project is quoted for your business and your market.',
+      items: [
+        {
+          icon: QrCode,
+          title: 'QR ordering menu',
+          text: 'Customers order from the table and the order comes to you on WhatsApp.',
+        },
+        {
+          icon: UtensilsCrossed,
+          title: 'Websites for restaurants',
+          text: 'Menu, photos, location and orders, all in one place.',
+        },
+        {
+          icon: Building2,
+          title: 'Websites for businesses and clinics',
+          text: 'Services, team, contact and online bookings.',
+        },
+        {
+          icon: Languages,
+          title: 'Websites in several languages',
+          text: 'Spanish, English and French, so no customer is left out.',
+        },
+      ],
+    },
+    kit: {
+      eyebrow: 'Extra · Physical kit',
+      title: 'More than a page: pieces your customers can touch',
+      sub: '3D-printed stands and napkin holders with your QR, so the menu is on every table, not just on the phone.',
+      items: [
+        {
+          icon: Printer,
+          title: '3D-printed pieces',
+          text: 'Napkin holders and stands with your QR and table number, in your brand colors.',
+        },
+        {
+          icon: Nfc,
+          title: 'NFC tags',
+          text: 'Customers hold their phone close and the menu opens by itself — no scanning, no hunting for the camera.',
+        },
+        {
+          icon: Palette,
+          title: 'Made for your brand',
+          text: 'Reusable base with a swappable QR plate: if your menu or number changes, only the plate gets reprinted.',
+        },
+      ],
+      note: 'Available on request. Ask me about the kit when you message me.',
+    },
+    process: {
+      eyebrow: 'How it works',
+      title: 'From your menu to your page in days',
+      sub: 'A short, clear process. You know what you get and when, before we start.',
+      steps: [
+        {
+          num: '01',
+          title: 'You tell me about your business',
+          text: 'A short call: your menu, your tables, your customers.',
+        },
+        {
+          num: '02',
+          title: 'Design and content',
+          text: 'I build your page with your real menu and your photos.',
+        },
+        {
+          num: '03',
+          title: 'Your page live in days',
+          text: 'QRs ready to print and place on the tables.',
+        },
+      ],
+    },
+    faq: {
+      eyebrow: 'Frequently asked questions',
+      title: 'What people ask me before we start',
+      items: [
+        {
+          question: 'Do my customers have to install an app?',
+          answer:
+            'No. They scan the QR with the phone camera and the menu opens in the browser. Nothing to download.',
+        },
+        {
+          question: 'How long until my page is ready?',
+          answer:
+            'Days. Send me your menu, your photos and your prices, and I build it all.',
+        },
+        {
+          question: 'How much does it cost?',
+          answer:
+            "Every project is quoted for your business and your market. Message me on WhatsApp and I'll quote you, no strings attached.",
+        },
+        {
+          question: 'Do I need a domain or a website already?',
+          answer:
+            "No. Your page is online from day one. If you want your own domain later, we'll add it.",
+        },
+        {
+          question: 'What happens when I change my menu or my prices?',
+          answer:
+            'You let me know and I update it. Menu updates are included.',
+        },
+      ],
+    },
+    contact: {
+      title: 'Shall we talk about your page?',
+      sub: "Message me on WhatsApp at the number for your country and I'll quote you for your business and your market. I reply personally.",
+      rdLabel: 'WhatsApp · Dominican Republic',
+      usLabel: 'WhatsApp · United States',
+      preferCall: 'Prefer to call?',
+      rdCall: 'DO +1 (809) 305-3316',
+      usCall: 'US +1 (929) 591-5936',
+      noStrings: 'No strings attached.',
+    },
+    footer: {
+      tagline: 'Websites for restaurants and businesses',
+      copyright: '© 2026 Paulino Gómez · Dominican Republic — New York',
+    },
+    floatingCta: 'Message me on WhatsApp',
+  },
+};
 
-const KIT_ITEMS = [
-  {
-    icon: Printer,
-    title: 'Piezas impresas en 3D',
-    text: 'Servilleteros y stands con tu QR y el número de mesa, en los colores de tu marca.',
-  },
-  {
-    icon: Nfc,
-    title: 'Tags NFC',
-    text: 'El cliente acerca el teléfono y el menú abre solo, sin escanear ni buscar la cámara.',
-  },
-  {
-    icon: Palette,
-    title: 'Hecho para tu marca',
-    text: 'Base reutilizable con la placa del QR intercambiable: si cambia tu menú o tu número, se reimprime solo la plaquita.',
-  },
-];
+const GITHUB_URL = 'https://github.com/gomezpaulino';
 
-const PROCESS_STEPS = [
-  {
-    num: '01',
-    title: 'Me cuentas de tu negocio',
-    text: 'Una llamada corta: tu menú, tus mesas, tus clientes.',
-  },
-  {
-    num: '02',
-    title: 'Diseño y contenido',
-    text: 'Armo tu página con tu menú real y tus fotos.',
-  },
-  {
-    num: '03',
-    title: 'Tu página en vivo en días',
-    text: 'QRs listos para imprimir y poner en las mesas.',
-  },
-];
-
-const FAQS = [
-  {
-    question: '¿Mis clientes tienen que instalar una aplicación?',
-    answer:
-      'No. Escanean el QR con la cámara del teléfono y el menú abre en el navegador. Nada que descargar.',
-  },
-  {
-    question: '¿Cuánto tarda en estar lista mi página?',
-    answer:
-      'En días. Me pasas tu menú, tus fotos y tus precios, y yo armo todo.',
-  },
-  {
-    question: '¿Cuánto cuesta?',
-    answer:
-      'Cada proyecto se cotiza según tu negocio y tu mercado. Escríbeme por WhatsApp y te cotizo sin compromiso.',
-  },
-  {
-    question: '¿Necesito tener un dominio o una página web ya?',
-    answer:
-      'No. Tu página queda en línea desde el primer día. Si más adelante quieres tu propio dominio, se le agrega.',
-  },
-  {
-    question: '¿Qué pasa cuando cambio mi menú o mis precios?',
-    answer:
-      'Me avisas y lo actualizo. Las actualizaciones del menú están incluidas.',
-  },
-];
+// Language resolution: an explicit ?lang= link wins, then the visitor's
+// saved choice, then the browser language (English browsers get English).
+function initialLang(): Lang {
+  const param = new URLSearchParams(window.location.search).get('lang');
+  if (param === 'en' || param === 'es') return param;
+  const stored = window.localStorage.getItem('pg-lang');
+  if (stored === 'en' || stored === 'es') return stored;
+  return window.navigator.language.toLowerCase().startsWith('en')
+    ? 'en'
+    : 'es';
+}
 
 function SectionHeading({
+  id,
   eyebrow,
   title,
   sub,
   dark = false,
 }: {
+  /** Heading id, matching the section's aria-labelledby. */
+  id: string;
   eyebrow: string;
   title: string;
   sub?: string;
@@ -195,6 +596,7 @@ function SectionHeading({
         {eyebrow}
       </p>
       <h2
+        id={id}
         className={`mt-3 font-display text-3xl font-semibold leading-tight text-balance sm:text-4xl ${
           dark ? 'text-crema-50' : 'text-amber-900'
         }`}
@@ -215,7 +617,15 @@ function SectionHeading({
 }
 
 /** Real homepage screenshot inside a browser frame. */
-function ProjectCard({ project }: { project: Project }) {
+function ProjectCard({
+  project,
+  visit,
+  newTab,
+}: {
+  project: Project;
+  visit: string;
+  newTab: string;
+}) {
   return (
     <article className="flex flex-col overflow-hidden rounded-2xl border border-crema-200 bg-white shadow-sm transition-shadow hover:shadow-md">
       <div className="border-b border-crema-200 bg-crema-100 px-4 py-3">
@@ -250,9 +660,9 @@ function ProjectCard({ project }: { project: Project }) {
           rel="noreferrer"
           className="mt-5 inline-flex items-center gap-1.5 self-start text-sm font-bold text-verde-700 hover:text-verde-800"
         >
-          Visitar sitio
+          {visit}
           <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-          <span className="visually-hidden">(se abre en otra pestaña)</span>
+          <span className="visually-hidden">{newTab}</span>
         </a>
       </div>
     </article>
@@ -260,8 +670,34 @@ function ProjectCard({ project }: { project: Project }) {
 }
 
 export default function App() {
+  const [lang, setLang] = useState<Lang>(initialLang);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
+
+  const c = CONTENT[lang];
+
+  // WhatsApp links carry the prefilled message in the visitor's language.
+  // Two numbers: the Dominican line is the main one, the US line is for US clients.
+  const whatsappUrlRd = `https://wa.me/18093053316?text=${c.whatsappText}`;
+  const whatsappUrlUs = `https://wa.me/19295915936?text=${c.whatsappText}`;
+
+  // Keep the document language, title and description in sync with the
+  // visible language, so screen readers and search engines see the same page.
+  useEffect(() => {
+    document.documentElement.lang = lang;
+    document.title = CONTENT[lang].meta.title;
+    document
+      .querySelector('meta[name="description"]')
+      ?.setAttribute('content', CONTENT[lang].meta.description);
+  }, [lang]);
+
+  const switchLang = (next: Lang) => {
+    setLang(next);
+    window.localStorage.setItem('pg-lang', next);
+    const url = new URL(window.location.href);
+    url.searchParams.set('lang', next);
+    window.history.replaceState(null, '', url);
+  };
 
   // Closing the menu unmounts the panel, so return focus to the button
   // that opened it; otherwise focus falls to BODY.
@@ -286,23 +722,34 @@ export default function App() {
         href="#main"
         className="sr-only focus:not-sr-only focus:fixed focus:left-2 focus:top-2 focus:z-[100] focus:rounded focus:bg-verde-800 focus:px-4 focus:py-2 focus:text-white"
       >
-        Saltar al contenido
+        {c.skipLink}
       </a>
       <header className="sticky top-0 z-40 border-b border-crema-200 bg-crema-50/90 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
           <a href="#main" className="whitespace-nowrap font-display text-lg font-semibold text-amber-900 sm:text-xl">
             Paulino Gómez
           </a>
-          <nav aria-label="Secciones" className="hidden items-center gap-5 text-sm font-semibold text-amber-800/80 lg:flex lg:gap-7">
-            {NAV_LINKS.map((link) => (
+          <nav aria-label={c.navLabel} className="hidden items-center gap-5 text-sm font-semibold text-amber-800/80 lg:flex lg:gap-7">
+            {c.nav.map((link) => (
               <a key={link.href} href={link.href} className="hover:text-verde-700">
                 {link.label}
               </a>
             ))}
           </nav>
           <div className="flex shrink-0 items-center gap-2">
+            {/* Language switcher: header pill on wide screens only. On narrow
+                screens it lives inside the hamburger menu, where there is room. */}
+            <button
+              type="button"
+              onClick={() => switchLang(lang === 'es' ? 'en' : 'es')}
+              aria-label={lang === 'es' ? c.switcher.toEnglish : c.switcher.toSpanish}
+              className="hidden items-center gap-1.5 rounded-full border-2 border-amber-900/15 bg-white px-3 py-2 text-sm font-bold text-amber-900 transition-colors hover:border-verde-700 hover:text-verde-700 lg:inline-flex"
+            >
+              <Languages className="h-4 w-4" aria-hidden="true" />
+              {lang === 'es' ? 'EN' : 'ES'}
+            </button>
             <a
-              href={WHATSAPP_URL_RD}
+              href={whatsappUrlRd}
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-2 rounded-full bg-verde-700 px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-verde-800"
@@ -315,7 +762,7 @@ export default function App() {
               ref={menuButtonRef}
               onClick={() => setMenuOpen((open) => !open)}
               aria-expanded={menuOpen}
-              aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
+              aria-label={menuOpen ? c.menu.close : c.menu.open}
               className="inline-flex h-10 w-10 items-center justify-center rounded-full text-amber-900 transition-colors hover:bg-crema-200 lg:hidden"
             >
               {menuOpen ? (
@@ -328,11 +775,11 @@ export default function App() {
         </div>
         {menuOpen ? (
           <nav
-            aria-label="Secciones"
+            aria-label={c.navLabel}
             className="border-t border-crema-200 bg-crema-50 px-5 py-3 lg:hidden"
           >
             <ul className="flex flex-col">
-              {NAV_LINKS.map((link) => (
+              {c.nav.map((link) => (
                 <li key={link.href}>
                   <a
                     href={link.href}
@@ -344,6 +791,43 @@ export default function App() {
                 </li>
               ))}
             </ul>
+            <div className="mt-2 flex items-center justify-between border-t border-crema-200 px-3 pt-3">
+              <span className="text-sm font-semibold text-amber-800/70">
+                {c.switcher.language}
+              </span>
+              <div className="flex gap-2" role="group" aria-label={c.switcher.language}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    switchLang('es');
+                    closeMenu();
+                  }}
+                  aria-pressed={lang === 'es'}
+                  className={`rounded-full px-4 py-2 text-sm font-bold transition-colors ${
+                    lang === 'es'
+                      ? 'bg-verde-700 text-white'
+                      : 'border-2 border-amber-900/15 bg-white text-amber-900 hover:border-verde-700 hover:text-verde-700'
+                  }`}
+                >
+                  ES
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    switchLang('en');
+                    closeMenu();
+                  }}
+                  aria-pressed={lang === 'en'}
+                  className={`rounded-full px-4 py-2 text-sm font-bold transition-colors ${
+                    lang === 'en'
+                      ? 'bg-verde-700 text-white'
+                      : 'border-2 border-amber-900/15 bg-white text-amber-900 hover:border-verde-700 hover:text-verde-700'
+                  }`}
+                >
+                  EN
+                </button>
+              </div>
+            </div>
           </nav>
         ) : null}
       </header>
@@ -353,41 +837,38 @@ export default function App() {
         <section aria-labelledby="hero-title" className="mx-auto max-w-6xl px-5 pb-16 pt-16 sm:pb-24 sm:pt-24">
           <div className="mx-auto max-w-3xl text-center">
             <p className="text-xs font-bold uppercase tracking-[0.25em] text-verde-600">
-              Sitios web para restaurantes y negocios
+              {c.hero.eyebrow}
             </p>
             <h1
               id="hero-title"
-              className="mt-5 font-display text-5xl font-semibold leading-[1.05] text-balance text-amber-900 sm:text-6xl md:text-7xl"
+              className="mt-5 font-display text-5xl font-semibold leading-[1.05] text-balance sm:text-6xl md:text-7xl"
             >
-              Páginas web que{' '}
-              <em className="text-verde-700">traen clientes</em>
+              {c.hero.titleA}{' '}
+              <em className="text-verde-700">{c.hero.titleEm}</em>
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-amber-800/80">
-              Menús digitales con pedidos por WhatsApp, páginas para
-              restaurantes, negocios y clínicas. Tus clientes piden desde la
-              mesa y los pedidos te llegan a ti, sin apps nuevas ni comisiones
-              por pedido.
+              {c.hero.sub}
             </p>
             <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <a
-                href={WHATSAPP_URL_RD}
+                href={whatsappUrlRd}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-verde-700 px-7 py-3.5 text-base font-bold text-white transition-colors hover:bg-verde-800 sm:w-auto"
               >
                 <MessageCircle className="h-5 w-5" aria-hidden="true" />
-                Escríbeme por WhatsApp
+                {c.hero.ctaPrimary}
               </a>
               <a
                 href="#trabajos"
                 className="inline-flex w-full items-center justify-center gap-2 rounded-full border-2 border-amber-900/15 bg-white px-7 py-3.5 text-base font-bold text-amber-900 transition-colors hover:border-verde-700 hover:text-verde-700 sm:w-auto"
               >
-                Ver trabajos
+                {c.hero.ctaSecondary}
                 <ArrowRight className="h-5 w-5" aria-hidden="true" />
               </a>
             </div>
             <p className="mt-8 text-sm font-medium text-amber-800/60">
-              3 sitios en vivo · República Dominicana y Irlanda
+              {c.hero.trust}
             </p>
           </div>
         </section>
@@ -400,13 +881,19 @@ export default function App() {
         >
           <div className="mx-auto max-w-6xl px-5">
             <SectionHeading
-              eyebrow="Trabajos recientes"
-              title="Sitios reales, en vivo hoy"
-              sub="Haz click y míralos. Cada uno se hizo a la medida de su negocio."
+              id="trabajos-title"
+              eyebrow={c.work.eyebrow}
+              title={c.work.title}
+              sub={c.work.sub}
             />
             <div className="mt-12 grid gap-6 md:grid-cols-3">
-              {PROJECTS.map((project) => (
-                <ProjectCard key={project.name} project={project} />
+              {c.work.projects.map((project) => (
+                <ProjectCard
+                  key={project.name}
+                  project={project}
+                  visit={c.work.visit}
+                  newTab={c.newTab}
+                />
               ))}
             </div>
           </div>
@@ -421,53 +908,35 @@ export default function App() {
           <div className="mx-auto max-w-6xl px-5">
             <div className="mx-auto max-w-2xl text-center">
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-300">
-                Menú digital con pedidos por WhatsApp
+                {c.product.eyebrow}
               </p>
               <h2
                 id="producto-title"
                 className="mt-3 font-display text-3xl font-semibold leading-tight text-balance sm:text-4xl"
               >
-                Tus clientes piden desde la mesa
+                {c.product.title}
               </h2>
               <p className="mt-4 text-base leading-relaxed text-crema-200 sm:text-lg">
-                Sin descargar nada, sin llamar al mesero para pedir. El pedido
-                cae en tu WhatsApp, listo para preparar.
+                {c.product.sub}
               </p>
             </div>
             <ol className="mx-auto mt-12 grid max-w-4xl gap-6 sm:grid-cols-3">
-              <li className="rounded-2xl border border-white/10 bg-white/5 p-6">
-                <QrCode className="h-8 w-8 text-amber-300" aria-hidden="true" />
-                <h3 className="mt-4 font-display text-xl font-semibold">
-                  1. Escanean el QR
-                </h3>
-                <p className="mt-2 text-[15px] leading-relaxed text-crema-200">
-                  En la mesa, con la cámara del teléfono. Nada que instalar.
-                </p>
-              </li>
-              <li className="rounded-2xl border border-white/10 bg-white/5 p-6">
-                <Smartphone className="h-8 w-8 text-amber-300" aria-hidden="true" />
-                <h3 className="mt-4 font-display text-xl font-semibold">
-                  2. Eligen y piden
-                </h3>
-                <p className="mt-2 text-[15px] leading-relaxed text-crema-200">
-                  Menú con fotos y precios, en su idioma.
-                </p>
-              </li>
-              <li className="rounded-2xl border border-white/10 bg-white/5 p-6">
-                <MessageCircle className="h-8 w-8 text-amber-300" aria-hidden="true" />
-                <h3 className="mt-4 font-display text-xl font-semibold">
-                  3. Te llega por WhatsApp
-                </h3>
-                <p className="mt-2 text-[15px] leading-relaxed text-crema-200">
-                  El pedido llega a tu teléfono, con mesa y todo, listo para
-                  preparar.
-                </p>
-              </li>
+              {c.product.steps.map((step) => (
+                <li key={step.title} className="rounded-2xl border border-white/10 bg-white/5 p-6">
+                  <step.icon className="h-8 w-8 text-amber-300" aria-hidden="true" />
+                  <h3 className="mt-4 font-display text-xl font-semibold">
+                    {step.title}
+                  </h3>
+                  <p className="mt-2 text-[15px] leading-relaxed text-crema-200">
+                    {step.text}
+                  </p>
+                </li>
+              ))}
             </ol>
             <div className="mx-auto mt-12 max-w-2xl rounded-2xl border border-white/10 bg-white/5 p-6 sm:p-8">
-              <h3 className="font-display text-xl font-semibold">Qué incluye</h3>
+              <h3 className="font-display text-xl font-semibold">{c.product.includesTitle}</h3>
               <ul className="mt-4 space-y-3">
-                {PRODUCT_INCLUDES.map((item) => (
+                {c.product.includes.map((item) => (
                   <li key={item} className="flex items-start gap-3 text-[15px] leading-relaxed text-crema-200">
                     <Check className="mt-0.5 h-5 w-5 shrink-0 text-amber-300" aria-hidden="true" />
                     {item}
@@ -486,12 +955,13 @@ export default function App() {
         >
           <div className="mx-auto max-w-6xl px-5">
             <SectionHeading
-              eyebrow="Servicios"
-              title="Qué puedo hacer por tu negocio"
-              sub="Cada proyecto se cotiza según tu negocio y tu mercado."
+              id="servicios-title"
+              eyebrow={c.services.eyebrow}
+              title={c.services.title}
+              sub={c.services.sub}
             />
             <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {SERVICES.map((service) => (
+              {c.services.items.map((service) => (
                 <article
                   key={service.title}
                   className="rounded-2xl border border-crema-200 bg-white p-6 shadow-sm"
@@ -517,12 +987,13 @@ export default function App() {
         >
           <div className="mx-auto max-w-6xl px-5">
             <SectionHeading
-              eyebrow="Extra · Kit físico"
-              title="Más que una página: piezas que tus clientes pueden tocar"
-              sub="Stands y servilleteros impresos en 3D con tu QR, para que el menú esté en cada mesa, no solo en el teléfono."
+              id="kit-title"
+              eyebrow={c.kit.eyebrow}
+              title={c.kit.title}
+              sub={c.kit.sub}
             />
             <div className="mt-12 grid gap-6 md:grid-cols-3">
-              {KIT_ITEMS.map((item) => (
+              {c.kit.items.map((item) => (
                 <article
                   key={item.title}
                   className="rounded-2xl border border-crema-200 bg-crema-50 p-6"
@@ -538,7 +1009,7 @@ export default function App() {
               ))}
             </div>
             <p className="mt-8 text-center text-sm font-medium text-amber-800/60">
-              Disponible bajo pedido. Pregúntame por el kit cuando escribas.
+              {c.kit.note}
             </p>
           </div>
         </section>
@@ -551,12 +1022,13 @@ export default function App() {
         >
           <div className="mx-auto max-w-6xl px-5">
             <SectionHeading
-              eyebrow="Cómo funciona"
-              title="De tu menú a tu página en días"
-              sub="Un proceso corto y claro. Sabes qué recibes y cuándo, antes de empezar."
+              id="proceso-title"
+              eyebrow={c.process.eyebrow}
+              title={c.process.title}
+              sub={c.process.sub}
             />
             <ol className="mx-auto mt-12 grid max-w-4xl gap-6 md:grid-cols-3">
-              {PROCESS_STEPS.map((step) => (
+              {c.process.steps.map((step) => (
                 <li key={step.num} className="rounded-2xl border border-crema-200 bg-white p-6 shadow-sm">
                   <p className="font-display text-4xl font-semibold text-amber-300">
                     {step.num}
@@ -581,11 +1053,12 @@ export default function App() {
         >
           <div className="mx-auto max-w-6xl px-5">
             <SectionHeading
-              eyebrow="Preguntas frecuentes"
-              title="Lo que me preguntan antes de empezar"
+              id="faq-title"
+              eyebrow={c.faq.eyebrow}
+              title={c.faq.title}
             />
             <div className="mx-auto mt-12 max-w-3xl space-y-4">
-              {FAQS.map((faq, index) => (
+              {c.faq.items.map((faq, index) => (
                 <details
                   key={faq.question}
                   open={index === 0}
@@ -620,36 +1093,35 @@ export default function App() {
               id="contacto-title"
               className="font-display text-3xl font-semibold leading-tight text-balance sm:text-4xl"
             >
-              ¿Hablamos de tu página?
+              {c.contact.title}
             </h2>
             <p className="mt-4 text-lg leading-relaxed text-crema-200">
-              Escríbeme por WhatsApp al número de tu país y te cotizo según
-              tu negocio y tu mercado. Te respondo personalmente.
+              {c.contact.sub}
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <a
-                href={WHATSAPP_URL_RD}
+                href={whatsappUrlRd}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex w-full flex-col items-center gap-0.5 rounded-2xl bg-white px-8 py-4 font-bold text-verde-800 transition-colors hover:bg-crema-100 sm:w-auto"
               >
                 <span className="inline-flex items-center gap-2 text-base">
                   <MessageCircle className="h-5 w-5" aria-hidden="true" />
-                  WhatsApp · República Dominicana
+                  {c.contact.rdLabel}
                 </span>
                 <span className="text-sm font-semibold text-verde-800/70">
                   +1 (809) 305-3316
                 </span>
               </a>
               <a
-                href={WHATSAPP_URL_US}
+                href={whatsappUrlUs}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex w-full flex-col items-center gap-0.5 rounded-2xl bg-white px-8 py-4 font-bold text-verde-800 transition-colors hover:bg-crema-100 sm:w-auto"
               >
                 <span className="inline-flex items-center gap-2 text-base">
                   <MessageCircle className="h-5 w-5" aria-hidden="true" />
-                  WhatsApp · Estados Unidos
+                  {c.contact.usLabel}
                 </span>
                 <span className="text-sm font-semibold text-verde-800/70">
                   +1 (929) 591-5936
@@ -657,23 +1129,23 @@ export default function App() {
               </a>
             </div>
             <p className="mt-5 text-sm text-crema-200">
-              ¿Prefieres llamar?{' '}
+              {c.contact.preferCall}{' '}
               <a
                 href="tel:+18093053316"
                 className="whitespace-nowrap font-semibold text-crema-50 underline hover:text-amber-300"
               >
-                RD +1 (809) 305-3316
+                {c.contact.rdCall}
               </a>
               {' · '}
               <a
                 href="tel:+19295915936"
                 className="whitespace-nowrap font-semibold text-crema-50 underline hover:text-amber-300"
               >
-                US +1 (929) 591-5936
+                {c.contact.usCall}
               </a>
             </p>
             <p className="mt-5 text-sm font-medium text-crema-200/70">
-              Sin compromiso.
+              {c.contact.noStrings}
             </p>
           </div>
         </section>
@@ -686,7 +1158,7 @@ export default function App() {
               Paulino Gómez
             </p>
             <p className="mt-1 text-sm text-crema-200/70">
-              Sitios web para restaurantes y negocios
+              {c.footer.tagline}
             </p>
           </div>
           <a
@@ -697,20 +1169,20 @@ export default function App() {
           >
             <Github className="h-5 w-5" aria-hidden="true" />
             GitHub
-            <span className="visually-hidden">(se abre en otra pestaña)</span>
+            <span className="visually-hidden">{c.newTab}</span>
           </a>
           <p className="text-sm text-crema-200/70">
-            © 2026 Paulino Gómez · República Dominicana — Nueva York
+            {c.footer.copyright}
           </p>
         </div>
       </footer>
 
       {/* Floating WhatsApp button: a way to reach out from anywhere on the page. */}
       <a
-        href={WHATSAPP_URL_RD}
+        href={whatsappUrlRd}
         target="_blank"
         rel="noreferrer"
-        aria-label="Escríbeme por WhatsApp"
+        aria-label={c.floatingCta}
         className="fixed bottom-5 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-verde-800 text-white shadow-lg transition-transform hover:scale-105"
       >
         <MessageCircle className="h-7 w-7" aria-hidden="true" />
