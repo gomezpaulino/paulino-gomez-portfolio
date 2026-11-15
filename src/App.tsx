@@ -40,15 +40,8 @@ type Project = {
   description: string;
   url: string;
   domain: string;
-  /** Accent color used in the stylized browser-frame preview. */
-  accent: string;
-  accentSoft: string;
-  /** Short wordmark shown inside the preview frame. */
-  previewTitle: string;
-  previewSubtitle: string;
-  previewLines: string[];
-  /** Label of the decorative call-to-action pill inside the preview. */
-  previewCta: string;
+  /** Real screenshot of the site's homepage, shown inside the browser frame. */
+  previewImage: string;
 };
 
 const PROJECTS: Project[] = [
@@ -60,12 +53,7 @@ const PROJECTS: Project[] = [
       'Menú en línea con pedidos por WhatsApp y fotos reales de cada plato.',
     url: 'https://los-chamos-x-la-calle.pages.dev',
     domain: 'los-chamos-x-la-calle.pages.dev',
-    accent: '#9a3412',
-    accentSoft: '#fff7ed',
-    previewTitle: 'Los Chamos',
-    previewSubtitle: 'x La Calle · Arepas, patacones y más',
-    previewLines: ['Arepa Reina Pepiada', 'Patacón Mixto', 'Tequeños'],
-    previewCta: 'Ver menú',
+    previewImage: '/img/work-los-chamos.jpg',
   },
   {
     name: 'Grotto Bar Restaurant',
@@ -75,12 +63,7 @@ const PROJECTS: Project[] = [
       'Menú QR en español, inglés y francés. El cliente pide desde su mesa y el pedido llega por WhatsApp.',
     url: 'https://grotto-ao8.pages.dev',
     domain: 'grotto-ao8.pages.dev',
-    accent: '#0a4a43',
-    accentSoft: '#edf6f4',
-    previewTitle: 'Grotto',
-    previewSubtitle: 'Bar Restaurant · Grand Laguna Beach',
-    previewLines: ['Chillo Entero', 'Cuba Sandwich', 'Mojito Clásico'],
-    previewCta: 'Ver menú',
+    previewImage: '/img/work-grotto.jpg',
   },
   {
     name: 'An Dún Medical Practice',
@@ -90,12 +73,7 @@ const PROJECTS: Project[] = [
       'Página profesional con servicios, equipo y reservas en línea.',
     url: 'https://www.andunmedical.ie',
     domain: 'www.andunmedical.ie',
-    accent: '#2e4633',
-    accentSoft: '#f0f4f0',
-    previewTitle: 'An Dún',
-    previewSubtitle: 'Medical Practice · Donegal Town',
-    previewLines: ['General Consultations', "Women's Health", 'Blood Clinic'],
-    previewCta: 'Ver servicios',
+    previewImage: '/img/work-andun.jpg',
   },
 ];
 
@@ -206,7 +184,7 @@ function SectionHeading({
   );
 }
 
-/** Stylized browser-frame preview. Typography and color only: never a fake screenshot. */
+/** Real homepage screenshot inside a browser frame. */
 function ProjectCard({ project }: { project: Project }) {
   return (
     <article className="flex flex-col overflow-hidden rounded-2xl border border-crema-200 bg-white shadow-sm transition-shadow hover:shadow-md">
@@ -220,36 +198,12 @@ function ProjectCard({ project }: { project: Project }) {
           </span>
         </div>
       </div>
-      <div
-        className="flex flex-col items-center px-6 py-8 text-center"
-        style={{ backgroundColor: project.accentSoft }}
-      >
-        <p
-          className="font-display text-3xl font-semibold"
-          style={{ color: project.accent }}
-        >
-          {project.previewTitle}
-        </p>
-        <p className="mt-1 text-xs font-medium uppercase tracking-wider text-amber-800/60">
-          {project.previewSubtitle}
-        </p>
-        <ul className="mt-5 w-full max-w-[240px] space-y-2">
-          {project.previewLines.map((line) => (
-            <li
-              key={line}
-              className="rounded-lg bg-white/80 px-3 py-2 text-left text-[13px] font-medium text-amber-900/80 shadow-sm"
-            >
-              {line}
-            </li>
-          ))}
-        </ul>
-        <span
-          className="mt-5 rounded-full px-4 py-1.5 text-xs font-bold text-white"
-          style={{ backgroundColor: project.accent }}
-        >
-          {project.previewCta}
-        </span>
-      </div>
+      <img
+        src={project.previewImage}
+        alt={`${project.name} homepage`}
+        loading="lazy"
+        className="aspect-[3/2] w-full border-b border-crema-200 object-cover"
+      />
       <div className="flex flex-1 flex-col p-6">
         <p className="text-xs font-bold uppercase tracking-[0.15em] text-verde-600">
           {project.tagline} · {project.location}
