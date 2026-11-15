@@ -140,18 +140,18 @@ const CONTENT: Record<Lang, Content> = {
     whatsappText:
       'Hola%20Paulino%2C%20quiero%20una%20p%C3%A1gina%20web%20para%20mi%20negocio',
     hero: {
-      eyebrow: 'Sitios web para restaurantes y negocios',
-      titleA: 'Páginas web que',
-      titleEm: 'traen clientes',
-      sub: 'Menús digitales con pedidos por WhatsApp, páginas para restaurantes, negocios y clínicas. Tus clientes piden desde la mesa y los pedidos te llegan a ti, sin apps nuevas ni comisiones por pedido.',
+      eyebrow: 'Menús QR para restaurantes · RD y Nueva York',
+      titleA: 'Tus clientes escanean el QR.',
+      titleEm: 'El pedido te cae en WhatsApp.',
+      sub: 'Sin apps que descargar y sin comisión por pedido. También hago páginas para negocios y clínicas.',
       ctaPrimary: 'Escríbeme por WhatsApp',
       ctaSecondary: 'Ver trabajos',
-      trust: '3 sitios en vivo · República Dominicana y Irlanda',
+      trust: 'En vivo en restaurantes de Sosúa y Veragua · Sirviendo a RD y Nueva York',
     },
     work: {
       eyebrow: 'Trabajos recientes',
       title: 'Sitios reales, en vivo hoy',
-      sub: 'Haz click y míralos. Cada uno se hizo a la medida de su negocio.',
+      sub: 'Entra y míralos. Cada uno se hizo a la medida de su negocio.',
       visit: 'Visitar sitio',
       projects: [
         {
@@ -187,9 +187,9 @@ const CONTENT: Record<Lang, Content> = {
       ],
     },
     product: {
-      eyebrow: 'Menú digital con pedidos por WhatsApp',
+      eyebrow: 'Menú QR con pedidos por WhatsApp',
       title: 'Tus clientes piden desde la mesa',
-      sub: 'Sin descargar nada, sin llamar al mesero para pedir. El pedido cae en tu WhatsApp, listo para preparar.',
+      sub: 'Sin llamar al mesero para pedir. El pedido cae en tu WhatsApp, listo para preparar.',
       steps: [
         {
           icon: QrCode,
@@ -255,16 +255,16 @@ const CONTENT: Record<Lang, Content> = {
         },
         {
           icon: Nfc,
-          title: 'Tags NFC',
+          title: 'Tags de toque (NFC)',
           text: 'El cliente acerca el teléfono y el menú abre solo, sin escanear ni buscar la cámara.',
         },
         {
           icon: Palette,
-          title: 'Hecho para tu marca',
+          title: 'Reutilizable y fácil de actualizar',
           text: 'Base reutilizable con la placa del QR intercambiable: si cambia tu menú o tu número, se reimprime solo la plaquita.',
         },
       ],
-      note: 'Disponible bajo pedido. Pregúntame por el kit cuando escribas.',
+      note: 'Lo hago por encargo. Pregúntame por el kit cuando escribas.',
     },
     process: {
       eyebrow: 'Cómo funciona',
@@ -283,7 +283,7 @@ const CONTENT: Record<Lang, Content> = {
         },
         {
           num: '03',
-          title: 'Tu página en vivo en días',
+          title: 'En vivo, con tus QR listos para imprimir',
           text: 'QRs listos para imprimir y poner en las mesas.',
         },
       ],
@@ -310,7 +310,7 @@ const CONTENT: Record<Lang, Content> = {
         {
           question: '¿Necesito tener un dominio o una página web ya?',
           answer:
-            'No. Tu página queda en línea desde el primer día. Si más adelante quieres tu propio dominio, se le agrega.',
+            'No. Tu página queda en línea desde el primer día. Si más adelante quieres tu propio dominio, te lo agrego.',
         },
         {
           question: '¿Qué pasa cuando cambio mi menú o mis precios?',
@@ -321,7 +321,7 @@ const CONTENT: Record<Lang, Content> = {
     },
     contact: {
       title: '¿Hablamos de tu página?',
-      sub: 'Escríbeme por WhatsApp al número de tu país y te cotizo según tu negocio y tu mercado. Te respondo personalmente.',
+      sub: 'Escríbeme por WhatsApp al número de tu país y te cotizo según tu negocio y tu mercado. Te respondo yo mismo.',
       rdLabel: 'WhatsApp · República Dominicana',
       usLabel: 'WhatsApp · Estados Unidos',
       preferCall: '¿Prefieres llamar?',
@@ -339,7 +339,7 @@ const CONTENT: Record<Lang, Content> = {
     meta: {
       title: 'Paulino Gómez — Websites for restaurants and businesses',
       description:
-        'QR ordering menus with WhatsApp orders, websites for restaurants, businesses and clinics. Your customers order from the table and the orders come to you.',
+        'QR menus where diners order from the table and the order goes straight to your WhatsApp. Also websites for restaurants, businesses and clinics.',
     },
     skipLink: 'Skip to content',
     newTab: '(opens in a new tab)',
@@ -361,13 +361,13 @@ const CONTENT: Record<Lang, Content> = {
     whatsappText:
       'Hi%20Paulino%2C%20I%20want%20a%20website%20for%20my%20business',
     hero: {
-      eyebrow: 'Websites for restaurants and businesses',
-      titleA: 'Websites that',
-      titleEm: 'bring in customers',
-      sub: 'QR ordering menus with WhatsApp orders, websites for restaurants, businesses and clinics. Your customers order from the table and the orders come to you — no new apps, no per-order commissions.',
+      eyebrow: 'QR menus for restaurants · DR and New York',
+      titleA: 'Diners scan the QR.',
+      titleEm: 'The order hits your WhatsApp.',
+      sub: 'No app to download. No commission on any order. I also build websites for businesses and clinics.',
       ctaPrimary: 'Message me on WhatsApp',
       ctaSecondary: 'See my work',
-      trust: '3 sites live · Dominican Republic and Ireland',
+      trust: 'Live now at restaurants in Sosúa and Veragua · Serving the DR and New York',
     },
     work: {
       eyebrow: 'Recent work',
@@ -387,7 +387,7 @@ const CONTENT: Record<Lang, Content> = {
         },
         {
           name: 'Grotto Bar Restaurant',
-          tagline: 'Bar restaurant',
+          tagline: 'Bar & restaurant',
           location: 'Sosúa, Dominican Republic',
           description:
             'QR menu in Spanish, English and French. Customers order from their table and the order arrives on WhatsApp.',
@@ -410,7 +410,7 @@ const CONTENT: Record<Lang, Content> = {
     product: {
       eyebrow: 'QR ordering menu',
       title: 'Your customers order from the table',
-      sub: 'Nothing to download, no need to flag down the waiter to order. The order lands on your WhatsApp, ready to prepare.',
+      sub: 'No waiting for the waiter. The order lands on your WhatsApp, ready to prepare.',
       steps: [
         {
           icon: QrCode,
@@ -424,7 +424,7 @@ const CONTENT: Record<Lang, Content> = {
         },
         {
           icon: MessageCircle,
-          title: '3. It reaches you on WhatsApp',
+          title: '3. It lands on your WhatsApp',
           text: 'The order arrives on your phone, table number and all, ready to prepare.',
         },
       ],
@@ -466,7 +466,7 @@ const CONTENT: Record<Lang, Content> = {
     },
     kit: {
       eyebrow: 'Extra · Physical kit',
-      title: 'More than a page: pieces your customers can touch',
+      title: 'More than a page: things your customers can actually touch',
       sub: '3D-printed stands and napkin holders with your QR, so the menu is on every table, not just on the phone.',
       items: [
         {
@@ -476,12 +476,12 @@ const CONTENT: Record<Lang, Content> = {
         },
         {
           icon: Nfc,
-          title: 'NFC tags',
+          title: 'Tap-to-open tags (NFC)',
           text: 'Customers hold their phone close and the menu opens by itself — no scanning, no hunting for the camera.',
         },
         {
           icon: Palette,
-          title: 'Made for your brand',
+          title: 'Reusable, easy to update',
           text: 'Reusable base with a swappable QR plate: if your menu or number changes, only the plate gets reprinted.',
         },
       ],
@@ -504,7 +504,7 @@ const CONTENT: Record<Lang, Content> = {
         },
         {
           num: '03',
-          title: 'Your page live in days',
+          title: 'Live, with QR codes ready to print',
           text: 'QRs ready to print and place on the tables.',
         },
       ],
@@ -541,8 +541,8 @@ const CONTENT: Record<Lang, Content> = {
       ],
     },
     contact: {
-      title: 'Shall we talk about your page?',
-      sub: "Message me on WhatsApp at the number for your country and I'll quote you for your business and your market. I reply personally.",
+      title: 'Want to talk about your page?',
+      sub: "Message me on WhatsApp at the number for your country and I'll quote you for your business and your market. I answer every message myself.",
       rdLabel: 'WhatsApp · Dominican Republic',
       usLabel: 'WhatsApp · United States',
       preferCall: 'Prefer to call?',
