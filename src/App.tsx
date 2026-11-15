@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   ArrowRight,
   ArrowUpRight,
@@ -231,12 +231,36 @@ function ProjectCard({ project }: { project: Project }) {
 
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+
+  // Closing the menu unmounts the panel, so return focus to the button
+  // that opened it; otherwise focus falls to BODY.
+  const closeMenu = () => {
+    setMenuOpen(false);
+    menuButtonRef.current?.focus();
+  };
+
+  // Escape closes the open menu and returns focus to the toggle button.
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') closeMenu();
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [menuOpen]);
 
   return (
     <div className="min-h-screen bg-crema-50 font-body text-amber-900 antialiased">
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-2 focus:top-2 focus:z-[100] focus:rounded focus:bg-verde-800 focus:px-4 focus:py-2 focus:text-white"
+      >
+        Saltar al contenido
+      </a>
       <header className="sticky top-0 z-40 border-b border-crema-200 bg-crema-50/90 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
-          <a href="#inicio" className="whitespace-nowrap font-display text-lg font-semibold text-amber-900 sm:text-xl">
+          <a href="#main" className="whitespace-nowrap font-display text-lg font-semibold text-amber-900 sm:text-xl">
             Paulino Gómez
           </a>
           <nav aria-label="Secciones" className="hidden items-center gap-7 text-sm font-semibold text-amber-800/80 md:flex">
@@ -258,6 +282,7 @@ export default function App() {
             </a>
             <button
               type="button"
+              ref={menuButtonRef}
               onClick={() => setMenuOpen((open) => !open)}
               aria-expanded={menuOpen}
               aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
@@ -281,7 +306,7 @@ export default function App() {
                 <li key={link.href}>
                   <a
                     href={link.href}
-                    onClick={() => setMenuOpen(false)}
+                    onClick={closeMenu}
                     className="block rounded-lg px-3 py-3 text-base font-semibold text-amber-900 hover:bg-crema-200"
                   >
                     {link.label}
@@ -293,7 +318,7 @@ export default function App() {
         ) : null}
       </header>
 
-      <main id="inicio">
+      <main id="main" tabIndex={-1}>
         {/* Hero */}
         <section aria-labelledby="hero-title" className="mx-auto max-w-6xl px-5 pb-16 pt-16 sm:pb-24 sm:pt-24">
           <div className="mx-auto max-w-3xl text-center">
@@ -565,6 +590,22 @@ export default function App() {
                 </span>
               </a>
             </div>
+            <p className="mt-5 text-sm text-crema-200">
+              ¿Prefieres llamar?{' '}
+              <a
+                href="tel:+18093053316"
+                className="whitespace-nowrap font-semibold text-crema-50 underline hover:text-amber-300"
+              >
+                RD +1 (809) 305-3316
+              </a>
+              {' · '}
+              <a
+                href="tel:+19295915936"
+                className="whitespace-nowrap font-semibold text-crema-50 underline hover:text-amber-300"
+              >
+                US +1 (929) 591-5936
+              </a>
+            </p>
             <p className="mt-5 text-sm font-medium text-crema-200/70">
               Sin compromiso.
             </p>
@@ -597,6 +638,17 @@ export default function App() {
           </p>
         </div>
       </footer>
+
+      {/* Floating WhatsApp button: a way to reach out from anywhere on the page. */}
+      <a
+        href={WHATSAPP_URL_RD}
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Escríbeme por WhatsApp"
+        className="fixed bottom-5 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-verde-800 text-white shadow-lg transition-transform hover:scale-105"
+      >
+        <MessageCircle className="h-7 w-7" aria-hidden="true" />
+      </a>
     </div>
   );
 }
