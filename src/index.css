@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* Smooth anchor scrolling is motion: enable it only for users who
+     have not asked for reduced motion. */
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+  body {
+    font-family: '"Plus Jakarta Sans"', system-ui, sans-serif;
+    /* Match the fallback's x-height to the web font so the first paint
+       does not shift when Plus Jakarta Sans arrives (Modern Web
+       Guidance: visually-stable-font-fallbacks). */
+    font-size-adjust: from-font;
+    background-color: #faf9f6;
+    color: #1d1710;
+  }
+  ::selection {
+    background-color: #e7cf8f;
+    color: #14100c;
+  }
+  /* Visible keyboard focus on every interactive element. */
+  :focus-visible {
+    outline: 3px solid #12776a;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  /* Hides content visually but keeps it in the accessibility tree. */
+  .visually-hidden:where(:not(:focus-within, :active)) {
+    position: absolute !important;
+    clip-path: inset(50%) !important;
+    overflow: hidden !important;
+    width: 1px !important;
+    height: 1px !important;
+    margin: -1px !important;
+    padding: 0 !important;
+    border: 0 !important;
+  }
+}
