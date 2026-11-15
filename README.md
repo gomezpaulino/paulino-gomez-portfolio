@@ -23,6 +23,8 @@ Plus Jakarta Sans; amber / verde / crema scales) are shared with it.
 - `npm run typecheck` — TypeScript check
 - `npm run lint` — ESLint
 
+Deploys automatically on push to `main` via Cloudflare Pages.
+
 ## Deploy
 
 Cloudflare Pages, project `paulino-gomez` → https://paulino-gomez.pages.dev/
