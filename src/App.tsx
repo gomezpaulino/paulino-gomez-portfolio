@@ -141,7 +141,7 @@ const CONTENT: Record<Lang, Content> = {
     hero: {
       titleShortA: 'Menú QR con pedidos por',
       titleShortEm: 'WhatsApp',
-      flowSteps: ['El cliente escanea', 'Eligen y piden', 'Te llega al instante'],
+      flowSteps: ['Cliente escanea', 'Eligen y piden', 'Llega al instante'],
       ctaPrimary: 'Escríbeme por WhatsApp',
       ctaSecondary: 'Ver trabajos',
       trust: 'En vivo en restaurantes de Sosúa y Veragua · Sirviendo a RD y Nueva York',
@@ -361,7 +361,7 @@ const CONTENT: Record<Lang, Content> = {
     hero: {
       titleShortA: 'QR menu with orders on',
       titleShortEm: 'WhatsApp',
-      flowSteps: ['Diners scan the QR', 'They choose and order', 'It lands instantly'],
+      flowSteps: ['Customer scans', 'Choose and order', 'Lands instantly'],
       ctaPrimary: 'Message me on WhatsApp',
       ctaSecondary: 'See my work',
       trust: 'Live now at restaurants in Sosúa and Veragua · Serving the DR and New York',
