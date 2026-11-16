@@ -52,10 +52,9 @@ type Content = {
   /** URL-encoded prefilled WhatsApp message, in the visitor's language. */
   whatsappText: string;
   hero: {
-    eyebrow: string;
-    titleA: string;
-    titleEm: string;
-    sub: string;
+    titleShortA: string;
+    titleShortEm: string;
+    flowSteps: string[];
     ctaPrimary: string;
     ctaSecondary: string;
     trust: string;
@@ -140,10 +139,9 @@ const CONTENT: Record<Lang, Content> = {
     whatsappText:
       'Hola%20Paulino%2C%20tengo%20un%20restaurante%20y%20quiero%20saber%20m%C3%A1s%20del%20men%C3%BA%20QR.',
     hero: {
-      eyebrow: 'Menús QR para restaurantes · RD y Nueva York',
-      titleA: 'Tus clientes escanean el QR.',
-      titleEm: 'El pedido te cae en WhatsApp.',
-      sub: 'Sin apps que descargar y sin comisión por pedido. También hago páginas para negocios y clínicas.',
+      titleShortA: 'Menú QR con pedidos por',
+      titleShortEm: 'WhatsApp',
+      flowSteps: ['El cliente escanea', 'Eligen y piden', 'Te llega al instante'],
       ctaPrimary: 'Escríbeme por WhatsApp',
       ctaSecondary: 'Ver trabajos',
       trust: 'En vivo en restaurantes de Sosúa y Veragua · Sirviendo a RD y Nueva York',
@@ -361,10 +359,9 @@ const CONTENT: Record<Lang, Content> = {
     whatsappText:
       'Hi%20Paulino%2C%20I%20own%20a%20restaurant%20and%20I%27d%20like%20to%20know%20more%20about%20the%20QR%20menu.',
     hero: {
-      eyebrow: 'QR menus for restaurants · DR and New York',
-      titleA: 'Diners scan the QR.',
-      titleEm: 'The order hits your WhatsApp.',
-      sub: 'No app to download. No commission on any order. I also build websites for businesses and clinics.',
+      titleShortA: 'QR menu with orders on',
+      titleShortEm: 'WhatsApp',
+      flowSteps: ['Diners scan the QR', 'They choose and order', 'It lands instantly'],
       ctaPrimary: 'Message me on WhatsApp',
       ctaSecondary: 'See my work',
       trust: 'Live now at restaurants in Sosúa and Veragua · Serving the DR and New York',
@@ -835,20 +832,42 @@ export default function App() {
       <main id="main" tabIndex={-1}>
         {/* Hero */}
         <section aria-labelledby="hero-title" className="mx-auto max-w-6xl px-5 pb-16 pt-16 sm:pb-24 sm:pt-24">
-          <div className="mx-auto max-w-3xl text-center">
-            <p className="text-xs font-bold uppercase tracking-[0.25em] text-verde-600">
-              {c.hero.eyebrow}
-            </p>
+          <div className="mx-auto max-w-5xl text-center">
             <h1
               id="hero-title"
-              className="mt-5 font-display text-5xl font-semibold leading-[1.05] text-balance sm:text-6xl md:text-7xl"
+              className="font-display text-4xl font-semibold leading-[1.05] text-balance sm:text-5xl md:text-6xl"
             >
-              {c.hero.titleA}{' '}
-              <em className="text-verde-700">{c.hero.titleEm}</em>
+              {c.hero.titleShortA}{' '}
+              <em className="text-verde-700">{c.hero.titleShortEm}</em>
             </h1>
-            <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-amber-800/80">
-              {c.hero.sub}
-            </p>
+            <div className="relative mx-auto mt-12 max-w-4xl">
+              <svg aria-hidden="true" className="absolute left-1/2 top-0 h-full w-1 -translate-x-1/2 md:hidden" viewBox="0 0 4 600" preserveAspectRatio="none">
+                <line x1="2" y1="0" x2="2" y2="600" stroke="#047857" strokeOpacity="0.4" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="0.1 9" vectorEffect="non-scaling-stroke" />
+              </svg>
+              <svg aria-hidden="true" className="absolute left-0 top-9 hidden h-1 w-full md:block" viewBox="0 0 896 4" preserveAspectRatio="none">
+                <line x1="100" y1="2" x2="796" y2="2" stroke="#047857" strokeOpacity="0.4" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="0.1 9" vectorEffect="non-scaling-stroke" />
+              </svg>
+              <ol className="relative flex flex-col items-center gap-12 md:flex-row md:items-start md:justify-between md:gap-6">
+                <li className="flex w-full max-w-[200px] flex-col items-center text-center">
+                  <div className="flex h-[4.5rem] w-[4.5rem] items-center justify-center rounded-full bg-verde-50 ring-1 ring-verde-700/25">
+                    <QrCode className="h-8 w-8 text-verde-700" aria-hidden="true" />
+                  </div>
+                  <p className="mt-3 bg-crema-50 px-2 font-display text-lg font-semibold text-amber-950">{c.hero.flowSteps[0]}</p>
+                </li>
+                <li className="flex w-full max-w-[200px] flex-col items-center text-center">
+                  <div className="flex h-[4.5rem] w-[4.5rem] items-center justify-center rounded-full bg-verde-50 ring-1 ring-verde-700/25">
+                    <Smartphone className="h-8 w-8 text-verde-700" aria-hidden="true" />
+                  </div>
+                  <p className="mt-3 bg-crema-50 px-2 font-display text-lg font-semibold text-amber-950">{c.hero.flowSteps[1]}</p>
+                </li>
+                <li className="flex w-full max-w-[200px] flex-col items-center text-center">
+                  <div className="flex h-[4.5rem] w-[4.5rem] items-center justify-center rounded-full bg-verde-50 ring-1 ring-verde-700/25">
+                    <img src="/img/whatsapp-green.svg" alt="" className="h-8 w-8" />
+                  </div>
+                  <p className="mt-3 bg-crema-50 px-2 font-display text-lg font-semibold text-amber-950">{c.hero.flowSteps[2]}</p>
+                </li>
+              </ol>
+            </div>
             <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <a
                 href={whatsappUrlRd}
