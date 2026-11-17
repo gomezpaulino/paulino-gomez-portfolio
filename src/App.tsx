@@ -30,6 +30,8 @@ type Project = {
   domain: string;
   /** Real screenshot of the site's homepage, shown inside the browser frame. */
   previewImage: string;
+  /** Optional pill on the card, e.g. "Demo" for a live demo (not a client). */
+  badge?: string;
 };
 
 type IconItem = {
@@ -181,6 +183,17 @@ const CONTENT: Record<Lang, Content> = {
           url: 'https://www.andunmedical.ie',
           domain: 'www.andunmedical.ie',
           previewImage: '/img/work-andun.jpg',
+        },
+        {
+          name: 'La Slice Pizzeria',
+          tagline: 'Pizzería',
+          location: 'Islandia, Nueva York',
+          description:
+            'Demo en vivo con el menú real de una pizzería de Long Island: 170 platos, toppings a elegir y pedidos por WhatsApp.',
+          url: 'https://la-slice-demo.pages.dev',
+          domain: 'la-slice-demo.pages.dev',
+          previewImage: '/img/work-la-slice.jpg',
+          badge: 'Demo',
         },
       ],
     },
@@ -401,6 +414,17 @@ const CONTENT: Record<Lang, Content> = {
           url: 'https://www.andunmedical.ie',
           domain: 'www.andunmedical.ie',
           previewImage: '/img/work-andun.jpg',
+        },
+        {
+          name: 'La Slice Pizzeria',
+          tagline: 'Pizzeria',
+          location: 'Islandia, New York',
+          description:
+            'Live demo built on a real Long Island pizzeria menu: 170 dishes, pick-your-own toppings and WhatsApp orders.',
+          url: 'https://la-slice-demo.pages.dev',
+          domain: 'la-slice-demo.pages.dev',
+          previewImage: '/img/work-la-slice.jpg',
+          badge: 'Demo',
         },
       ],
     },
@@ -643,6 +667,11 @@ function ProjectCard({
       />
       <div className="flex flex-1 flex-col p-6">
         <p className="text-xs font-bold uppercase tracking-[0.15em] text-verde-600">
+          {project.badge && (
+            <span className="mr-2 rounded-full bg-amber-100 px-2 py-0.5 text-[10px] text-amber-800">
+              {project.badge}
+            </span>
+          )}
           {project.tagline} · {project.location}
         </p>
         <h3 className="mt-2 font-display text-2xl font-semibold text-amber-900">
@@ -905,7 +934,7 @@ export default function App() {
               title={c.work.title}
               sub={c.work.sub}
             />
-            <div className="mt-12 grid gap-6 md:grid-cols-3">
+            <div className="mt-12 grid gap-6 md:grid-cols-2">
               {c.work.projects.map((project) => (
                 <ProjectCard
                   key={project.name}
